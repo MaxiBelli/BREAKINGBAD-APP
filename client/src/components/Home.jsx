@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCharacters } from "../actions";
+import { getCharacters } from "../redux/actions";
 import Card from "./Card";
 
 //COMIENZA EL COMPONENTE
