@@ -1,15 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
+//importo los hooks q voy a usar de react
 import { useState, useEffect } from "react";
+//importo los hooks q voy a usar de react-redux(los instalo)
 import { useDispatch, useSelector } from "react-redux";
-import { getCharacters } from "../redux/actions";
+//importo las actions que me interesa usar en este componente
+import {
+  getCharacters,
+  filterCharactersByStatus,
+  filterCreated,
+  orderByName,
+} from "../actions";
 import Card from "./Card";
+import Paged from "./Paged";
+import SearchBar from "./SearchBar";
 
 //COMIENZA EL COMPONENTE
 export default function Home() {
   const dispatch = useDispatch();
   const allCharacters = useSelector((state) => state.characters); //hooks...esta linea es lo mismo q hacer mapstatetoprops
   // con useselector traeme en esa const todo lo q esta en el estado de characters
+
+  //OREDENAMIENTO
+  const [orden, setOrden] = useState("");
+
+  //PAGINADO
+  const [currentPage, setCurrentPage] = useState(1); //pag actual y una q me la setea.(1) xq arranca en la primer pag
+  const [charactesPerPage, setcharactesPerPage] = useState(6); //personajes x pagina.(6)xq va a haber 6 personajes x pagina
+  const indexOfLastCharacter = currentPage * charactesPerPage; // ind ultimo char = pag actual * char x pag (6)
+  const indexOfFirtsCharacter = indexOfLastCharacter - charactesPerPage; //ind 1° char = ultimo - char x pag
+  const currentCharacters = allCharacters.slice(
+    indexOfFirtsCharacter,
+    indexOfLastCharacter
+  ); //personajes a renderizar dependiendo de la pag
+
+  const page = (pageNumber) => {
+    //es la q me a ayudar al renderizado
+    setCurrentPage(pageNumber);
+  };
 
   useEffect(() => {
     //va a cumplir las veces del componentDidMount al momento de montarse el componente
@@ -22,37 +50,60 @@ export default function Home() {
     dispatch(getCharacters());
   }
 
+  //FILTRADOS X STATUS
+  function handleFilterStatus(e) {
+    dispatch(filterCharactersByStatus(e.target.value));
+  }
+
+  //FILTRADOS X CREADOS O EXISTENTES
+  function handleFilterCreated(e) {
+    dispatch(filterCreated(e.target.value));
+  }
+
+  //ORDENAMIENTO X NOMBRE ASC Y DES
+  function handleSort(e) {
+    e.preventDefault();
+    dispatch(orderByName(e.target.value));
+    setCurrentPage(1); //cuando seteo esta pag
+    setOrden(`Ordenado ${e.target.value}`); //me modifique el estado local y se renderize
+  }
+
   return (
     <div>
-      <Link to="/character">Create Character </Link>
-      <h1>BREAKING BAD</h1>
+      <Link to="/character">Crear Personaje </Link>
+      <h1>AGUANTE BREAKING BAD</h1>
       <button
         onClick={(e) => {
           handleClick(e);
         }}
       >
-        Reload All Characters
+        Volver a cargar todos los personajes
       </button>
       <div>
-        <select>
-          <option value="asc">Ascendent</option>
-          <option value="desc">Descendent</option>
+        <select onChange={(e) => handleSort(e)}>
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
         </select>
-        <select>
-          <option value="All">All</option>
-          <option value="Alive">Alive</option>
-          <option value="Deceased">Deceased</option>
-          <option value="Unknown">nknown</option>
-          <option value="Presumed dead">Presumed dead</option>
+        <select onChange={(e) => handleFilterStatus(e)}>
+          <option value="All">Todos</option>
+          <option value="Alive">Vivo</option>
+          <option value="Deceased">Muerto</option>
+          <option value="Unknown">Desconocido</option>
+          <option value="Presumed dead">Probablemente muerto</option>
         </select>
-        <select>
-          <option value="All">All</option>
-          <option value="created">Created</option>
-          <option value="api">Existing</option>
+        <select onChange={(e) => handleFilterCreated(e)}>
+          <option value="All">Todos</option>
+          <option value="created">Creados</option>
+          <option value="api">Existente</option>
         </select>
-
-        {allCharacters &&
-          allCharacters.map((c) => {
+        <Paged
+          charactersPerPage={charactesPerPage}
+          allCharacters={allCharacters.length}
+          page={page}
+        />
+        <SearchBar />
+        {currentCharacters &&
+          currentCharacters.map((c) => {
             //allCharacters.map?
             return (
               <div>
