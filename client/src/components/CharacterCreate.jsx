@@ -67,7 +67,7 @@ export default function CharacterCreated() {
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(postCharacter(input));
-    alert("Personaje Creado!!!");
+    alert("Character Created!!!");
     setInput({
       name: "",
       nickname: "",
@@ -86,9 +86,9 @@ export default function CharacterCreated() {
   return (
     <div>
       <Link to="/home">
-        <button>Volver</button>
+        <button>Back</button>
       </Link>
-      <h1>Creá tu Personaje!!!</h1>
+      <h1>Create your character!!!</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
           <label>Nombre</label>
@@ -111,7 +111,7 @@ export default function CharacterCreated() {
           {errors.nickname && <p className="error">{errors.nickname}</p>}
         </div>
         <div>
-          <label>Cumpleaños</label>
+          <label>Birthday</label>
           <input
             type="text"
             value={input.birthday}
@@ -120,7 +120,7 @@ export default function CharacterCreated() {
           />
         </div>
         <div>
-          <label>Imagen</label>
+          <label>Image</label>
           <input
             type="text"
             value={input.image}
@@ -137,7 +137,7 @@ export default function CharacterCreated() {
               name="Alive"
               onChange={(e) => handleCheck(e)}
             />
-            Vivo
+            Alive
           </label>
           <label>
             <input
@@ -146,7 +146,7 @@ export default function CharacterCreated() {
               name="Deceased"
               onChange={(e) => handleCheck(e)}
             />
-            Muerto
+            Deceased
           </label>
           <label>
             <input
@@ -155,7 +155,7 @@ export default function CharacterCreated() {
               name="Unknown"
               onChange={(e) => handleCheck(e)}
             />
-            Desconocido
+            Unknown
           </label>
           <label>
             <input
@@ -164,7 +164,7 @@ export default function CharacterCreated() {
               name="Presumed dead"
               onChange={(e) => handleCheck(e)}
             />
-            Supuestamente Muerto
+            Presumed dead
           </label>
         </div>
         <select onChange={(e) => handleSelect(e)}>
@@ -175,7 +175,7 @@ export default function CharacterCreated() {
         <ul>
           <li>{input.occupations.map((el) => el + " ,")}</li>
         </ul>
-        <button type="submit">Crear Personaje</button>{" "}
+        <button type="submit">Create Character</button>{" "}
       </form>
       {input.occupations.map((el) => (
         <div className="divocc">

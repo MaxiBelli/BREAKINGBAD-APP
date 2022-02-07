@@ -10,7 +10,7 @@ import {
   filterCharactersByStatus,
   filterCreated,
   orderByName,
-} from "../actions";
+} from "../redux/actions";
 import Card from "./Card";
 import Paged from "./Paged";
 import SearchBar from "./SearchBar";
@@ -18,31 +18,27 @@ import SearchBar from "./SearchBar";
 //COMIENZA EL COMPONENTE
 export default function Home() {
   const dispatch = useDispatch();
-  const allCharacters = useSelector((state) => state.characters); //hooks...esta linea es lo mismo q hacer mapstatetoprops
-  // con useselector traeme en esa const todo lo q esta en el estado de characters
+  const allCharacters = useSelector((state) => state.characters);
 
   //OREDENAMIENTO
   const [orden, setOrden] = useState("");
 
   //PAGINADO
-  const [currentPage, setCurrentPage] = useState(1); //pag actual y una q me la setea.(1) xq arranca en la primer pag
-  const [charactesPerPage, setcharactesPerPage] = useState(6); //personajes x pagina.(6)xq va a haber 6 personajes x pagina
-  const indexOfLastCharacter = currentPage * charactesPerPage; // ind ultimo char = pag actual * char x pag (6)
-  const indexOfFirtsCharacter = indexOfLastCharacter - charactesPerPage; //ind 1° char = ultimo - char x pag
+  const [currentPage, setCurrentPage] = useState(1);
+  const [charactesPerPage, setcharactesPerPage] = useState(6);
+  const indexOfLastCharacter = currentPage * charactesPerPage;
+  const indexOfFirtsCharacter = indexOfLastCharacter - charactesPerPage;
   const currentCharacters = allCharacters.slice(
     indexOfFirtsCharacter,
     indexOfLastCharacter
-  ); //personajes a renderizar dependiendo de la pag
+  );
 
   const page = (pageNumber) => {
-    //es la q me a ayudar al renderizado
     setCurrentPage(pageNumber);
   };
 
   useEffect(() => {
-    //va a cumplir las veces del componentDidMount al momento de montarse el componente
-    //me va llenando el estado cdo se monta el componente
-    dispatch(getCharacters()); ////con el useEffect reemplazo la lógica del mapDispatchToProps
+    dispatch(getCharacters());
   }, [dispatch]); //
 
   function handleClick(e) {
@@ -70,31 +66,31 @@ export default function Home() {
 
   return (
     <div>
-      <Link to="/character">Crear Personaje </Link>
-      <h1>AGUANTE BREAKING BAD</h1>
+      <Link to="/character">Create Character </Link>
+      <h1>BREAKING BAD APP</h1>
       <button
         onClick={(e) => {
           handleClick(e);
         }}
       >
-        Volver a cargar todos los personajes
+        Reload all characters
       </button>
       <div>
         <select onChange={(e) => handleSort(e)}>
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
         </select>
         <select onChange={(e) => handleFilterStatus(e)}>
-          <option value="All">Todos</option>
-          <option value="Alive">Vivo</option>
-          <option value="Deceased">Muerto</option>
-          <option value="Unknown">Desconocido</option>
-          <option value="Presumed dead">Probablemente muerto</option>
+          <option value="All">All</option>
+          <option value="Alive">Alive</option>
+          <option value="Deceased">Deceased</option>
+          <option value="Unknown">Unknown</option>
+          <option value="Presumed dead">Presumed dead</option>
         </select>
         <select onChange={(e) => handleFilterCreated(e)}>
-          <option value="All">Todos</option>
-          <option value="created">Creados</option>
-          <option value="api">Existente</option>
+          <option value="All">All</option>
+          <option value="created">Created</option>
+          <option value="api">Existing</option>
         </select>
         <Paged
           charactersPerPage={charactesPerPage}
