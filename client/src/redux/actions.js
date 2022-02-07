@@ -55,6 +55,19 @@ export function filterCharactersByStatus(payload) {
   };
 }
 
+export function filterCreated(payload) {
+  return {
+    type: "FILTER_CREATED",
+    payload,
+  };
+}
+
+export function orderByName(payload) {
+  return {
+    type: "ORDER_BY_NAME",
+    payload,
+  };
+}
 export function getOccupations() {
   return async function (dispatch) {
     try {
