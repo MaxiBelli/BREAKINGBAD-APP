@@ -1,13 +1,8 @@
 const { Router } = require("express");
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
-const axios = require("axios"); //importo
+const axios = require("axios");
 const { Character, Occupation } = require("../db");
 
 const router = Router();
-
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
 
 const getApiInfo = async () => {
   const apiUrl = await axios.get("https://breakingbadapi.com/api/characters");
@@ -31,9 +26,8 @@ const getDbinfo = async () => {
   return await Character.findAll({
     include: {
       model: Occupation,
-      attributes: ["name"], //traer nombre
+      attributes: ["name"],
       through: {
-        //mediante este atributo traeme el modelo de ocupacion//es una comprobacion
         attributes: [],
       },
     },
@@ -41,14 +35,14 @@ const getDbinfo = async () => {
 };
 
 const getAllCharacters = async () => {
-  let apiInfo = await getApiInfo(); //la ejecuto sino no me va a devolver nada
+  let apiInfo = await getApiInfo();
   const dbInfo = await getDbinfo();
-  const infoTotal = apiInfo.concat(dbInfo);
-  return infoTotal;
+  const totalInfo = apiInfo.concat(dbInfo);
+  return totalInfo;
 };
 
 router.get("/characters", async (req, res, next) => {
-  const name = req.query.name; ///characters?name=...
+  const name = req.query.name;
   const charactersTotal = await getAllCharacters();
   try {
     if (name) {
@@ -66,40 +60,36 @@ router.get("/characters", async (req, res, next) => {
   }
 });
 
-router.get("/occupations", async (req, res, next) => {
-  const occupationsApi = await axios.get(
-    "https://breakingbadapi.com/api/characters"
-  ); //entra api
-  const occupations = occupationsApi.data.map((el) => el.occupation); //me trae la info y la mapea
-  const occEach = occupations.map((el) => {
-    //xq es un arreglo de arreglos
-    for (let i = 0; i < el.length; i++) return el[i];
-  });
-  console.log(occEach);
-  occEach.forEach((el) => {
-    Occupation.findOrCreate({
-      //si no  esta lo crea y si no no
-      where: { name: el }, //donde el nombre sea este el q toy mapeando
+router.get("/occupations", async (req, res) => {
+  let occupationsDb = await Occupation.findAll();
+  if (occupationsDb.length === 0) {
+    const charactersTotal = await getAllCharacters();
+    const aux = await charactersTotal.map((el) => el.occupation);
+    let occupationsApi = [];
+    for (let i = 0; i < aux.length; i++) {
+      for (let j = 0; j < aux[i].length; j++) {
+        occupationsApi.push(aux[i][j]);
+      }
+    }
+    occupationsApi = occupationsApi.filter((el, i) => {
+      //para no repetir las ocupaciones
+      return occupationsApi.indexOf(el) === i;
     });
-  });
-  const allOccupations = Occupation.findAll(); //me guarda todas las ocupaciones en el modelo
-  res.send(allOccupations);
+    occupationsApi.forEach((el) => {
+      Occupation.findOrCreate({
+        where: { name: el },
+      });
+    });
+    occupationsDb = await Occupation.findAll();
+  }
+  res.send(occupationsDb);
 });
 
 router.post("/characters", async (req, res, next) => {
-  //post con todo lo q me va a llegar x body
-  let {
-    name,
-    nickname,
-    birthday,
-    img,
-    status,
-    createdInDb,
-    occupation, //abajo no le paso ocupacion xq tengo q hacer la relacion a aparte
-  } = req.body;
+  let { name, nickname, birthday, img, status, createdInDb, occupation } =
+    req.body;
 
   let characterCreated = await Character.create({
-    //creo el personaje con todo esto
     name,
     nickname,
     birthday,
@@ -109,10 +99,9 @@ router.post("/characters", async (req, res, next) => {
   });
 
   let occupationDb = await Occupation.findAll({
-    //la ocupacion la tengo q encontrar en el modelo q tiene todas las ocupaciones
-    where: { name: occupation }, //donde la ocupacion la tengo q encontrar con la q coincida con la q le paso x body
+    where: { name: occupation },
   });
-  characterCreated.addOccupation(occupationDb); //al perdonaje creado le agrego la ocupacion q coincidio con el nombre
+  characterCreated.addOccupation(occupationDb);
   res.send("Character created successfuly!!");
 });
 
@@ -134,10 +123,10 @@ module.exports = router;
 //PUT
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const activity = req.body;
+  const character = req.body;
 
   try {
-    let act = await Activity.update(activity, {
+    let updateCharacter = await Activity.update(character, {
       where: { id },
     });
     return res.json({ changed: true });
@@ -151,7 +140,7 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    let act = await Activity.destroy({
+    let deleteCharacter = await Character.destroy({
       where: { id },
     });
     return res.json({ erased: true });
