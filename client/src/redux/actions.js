@@ -83,16 +83,24 @@ export function getOccupations() {
   };
 }
 
+// export function postCharacter(payload) {
+//   return async function (dispatch) {
+//     const response = await axios.post(
+//       "http://localhost:3001/characters",
+//       payload
+//     );
+//     console.log(response);
+//     return {
+//       type: "POST_CHARACTER",
+//       response,
+//     };
+//   };
+// }
 export function postCharacter(payload) {
-  return async function (dispatch) {
-    const response = await axios.post(
-      "http://localhost:3001/characters",
-      payload
-    );
-    console.log(response);
-    return {
-      type: "POST_CHARACTER",
-      response,
-    };
-  };
+  return async function(dispatch){
+      const info = await axios.post("http://localhost:3001/characters", payload)
+      console.log("OCC")
+      console.log(payload)
+      return info
+  }
 }

@@ -1,46 +1,22 @@
 const { Router } = require("express");
 const axios = require("axios");
 const { Character, Occupation } = require("../db");
-
+const getAllCharacters = require("../Controllers/getAllCharacters");
 const router = Router();
 
-const getApiInfo = async () => {
-  const apiUrl = await axios.get("https://breakingbadapi.com/api/characters");
-  const apiInfo = await apiUrl.data.map((el) => {
-    return {
-      name: el.name,
-      img: el.img,
-      nickname: el.nickname,
-      status: el.status,
-      id: el.char_id,
-      occupation: el.occupation.map((el) => el),
-      birthday: el.birthday,
-    };
-  });
-  // console.log(apiInfo);
-  return apiInfo;
-};
 
-console.log(getApiInfo());
-
-const getDbinfo = async () => {
-  return await Character.findAll({
-    include: {
-      model: Occupation,
-      attributes: ["name"],
-      through: {
-        attributes: [],
-      },
-    },
-  });
-};
-
-const getAllCharacters = async () => {
-  let apiInfo = await getApiInfo();
-  const dbInfo = await getDbinfo();
-  const totalInfo = apiInfo.concat(dbInfo);
-  return totalInfo;
-};
+router.get("/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const charactersTotal = await getAllCharacters();
+  if (id) {
+    let characterId = await charactersTotal.filter(
+      (el) => el.id.toString() === id
+    );
+    characterId.length
+      ? res.status(200).json(characterId)
+      : res.status(404).send("No se encontró el personaje");
+  }
+});
 
 router.get("/", async (req, res) => {
   const name = req.query.name;
@@ -60,7 +36,7 @@ router.get("/", async (req, res) => {
 
 
 router.post("/", async (req, res) => {
-  let { name, nickname, birthday, img, status, createdInDb, occupation } =
+  let { name, nickname, birthday, img, status, createdInDb, occupations } =
     req.body;
 
   let characterCreated = await Character.create({
@@ -72,57 +48,45 @@ router.post("/", async (req, res) => {
     createdInDb,
   });
 
-  let occupationDb = await Occupation.findAll({
-    where: { name: occupation },
+  let occupationCreated = await Occupation.findAll({
+    where: { name: occupations },
   });
-  characterCreated.addOccupation(occupationDb);
+  characterCreated.addOccupation(occupationCreated);
   res.send("Character created successfuly!!");
 });
 
-// router.get("/characters/:id", async (req, res, next) => {
+// router.get("/:id", async (req, res) => {
 //   const id = req.params.id;
-//   const charactersTotal = await getAllCharacters();
-//   if (id) {
-//     let characterId = await charactersTotal.filter(
-//       (el) => el.id.toString() === id
+//   if (!isNaN(id)) {
+//     const characterIdUrl = await axios.get(
+//       "https://www.breakingbadapi.com/api/characters/" + id
 //     );
-//     characterId.length
-//       ? res.status(200).json(characterId)
-//       : res.status(404).send("No se encontró el personaje");
+//     const characterIdInfo = await characterIdUrl.data.map((el) => {
+//       const { char_id, name, nickname, birthday, status, img, occupation } = el;
+//       return {
+//         char_id,
+//         name,
+//         nickname,
+//         birthday,
+//         status,
+//         img,
+//         occupation,
+//       };
+//     });
+//     res.send(characterIdInfo);
+//   } else {
+//     const characterIdBd = await Character.findByPk(id, {
+//       include: {
+//         model: Occupation,
+//         attributes: ["name"],
+//         through: {
+//           attributes: [],
+//         },
+//       },
+//     });
+//     res.send(characterIdBd);
 //   }
 // });
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  if (!isNaN(id)) {
-    const characterIdUrl = await axios.get(
-      "https://www.breakingbadapi.com/api/characters/" + id
-    );
-    const characterIdInfo = await characterIdUrl.data.map((el) => {
-      const { char_id, name, nickname, birthday, status, img, occupation } = el;
-      return {
-        char_id,
-        name,
-        nickname,
-        birthday,
-        status,
-        img,
-        occupation,
-      };
-    });
-    res.send(characterIdInfo);
-  } else {
-    const characterIdBd = await Character.findByPk(id, {
-      include: {
-        model: Occupation,
-        attributes: ["name"],
-        through: {
-          attributes: [],
-        },
-      },
-    });
-    res.send(characterIdBd);
-  }
-});
 
 module.exports = router;
 

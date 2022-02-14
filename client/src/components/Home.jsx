@@ -15,7 +15,7 @@ import Card from "./Card";
 import Paged from "./Paged";
 import SearchBar from "./SearchBar";
 
-//COMIENZA EL COMPONENTE
+
 export default function Home() {
   const dispatch = useDispatch();
   const allCharacters = useSelector((state) => state.characters);
@@ -56,12 +56,12 @@ export default function Home() {
     dispatch(filterCreated(e.target.value));
   }
 
-  //ORDENAMIENTO X NOMBRE ASC Y DES
+  //ORDENAMIENTO X NOMBRE ASC Y DESC
   function handleSort(e) {
     e.preventDefault();
     dispatch(orderByName(e.target.value));
-    setCurrentPage(1); //cuando seteo esta pag
-    setOrden(`Ordenado ${e.target.value}`); //me modifique el estado local y se renderize
+    setCurrentPage(1);
+    setOrden(`Ordenado ${e.target.value}`);
   }
 
   return (

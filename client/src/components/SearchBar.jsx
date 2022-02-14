@@ -8,7 +8,6 @@ export default function SearchBar() {
   const [name, setName] = useState("");
 
   function handleInputChange(e) {
-    //voy a guardar en mi estado local lo q vaya apareciendo en el input
     e.preventDefault();
     setName(e.target.value);
     console.log(name);
@@ -16,7 +15,12 @@ export default function SearchBar() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(getNameCharacters(name)); //yo voy a ir guardando lo q esta tipeando el usuario en el estado local name
+    if (name !== "") {
+      dispatch(getNameCharacters(name));
+      setName("");
+    } else {
+      alert("Enter the name of the characters to search");
+    }
   }
 
   return (
