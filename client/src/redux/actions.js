@@ -34,10 +34,10 @@ export function getNameCharacters(name) {
   };
 }
 
-export function getDetail(id) {
+export function getDetail(payload) {
   return async function (dispatch) {
     try {
-      var json = await axios.get(`http://localhost:3001/characters/${id}`);
+      var json = await axios.get(`http://localhost:3001/characters/${payload}`);
       return dispatch({
         type: "GET_DETAIL",
         payload: json.data,

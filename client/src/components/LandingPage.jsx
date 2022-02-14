@@ -6,7 +6,7 @@ export default function LandingPage(){
     return(
         <div>
             <h1>Welcome to Breaking Bad App</h1>
-            <Link to="/characters">
+            <Link to="/home">
                 <button>Get Into</button>
             </Link>
         </div>

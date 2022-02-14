@@ -66,7 +66,7 @@ export default function Home() {
 
   return (
     <div>
-      <Link to="/character">Create Character </Link>
+      <Link to="/character">Create Character</Link>
       <h1>BREAKING BAD APP</h1>
       <button
         onClick={(e) => {
