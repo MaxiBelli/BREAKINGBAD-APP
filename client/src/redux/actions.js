@@ -34,7 +34,7 @@ export function getNameCharacters(name) {
   };
 }
 
-export function getDetail(payload) {
+export function getDetailCharacter(payload) {
   return async function (dispatch) {
     try {
       var json = await axios.get(`http://localhost:3001/characters/${payload}`);
@@ -55,14 +55,14 @@ export function filterCharactersByStatus(payload) {
   };
 }
 
-export function filterCreated(payload) {
+export function filterCharactersByOrigin(payload) {
   return {
     type: "FILTER_CREATED",
     payload,
   };
 }
 
-export function orderByName(payload) {
+export function orderCharactersByName(payload) {
   return {
     type: "ORDER_BY_NAME",
     payload,

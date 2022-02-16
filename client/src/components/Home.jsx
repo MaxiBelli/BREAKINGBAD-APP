@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getCharacters,
   filterCharactersByStatus,
-  filterCreated,
-  orderByName,
+  filterCharactersByOrigin,
+  orderCharactersByName,
 } from "../redux/actions";
-import Card from "./Card";
+import CardCharacter from "./CardCharacter";
 import Paged from "./Paged";
 import SearchBar from "./SearchBar";
 
@@ -53,13 +53,13 @@ export default function Home() {
 
   //FILTRADOS X CREADOS O EXISTENTES
   function handleFilterCreated(e) {
-    dispatch(filterCreated(e.target.value));
+    dispatch(filterCharactersByOrigin(e.target.value));
   }
 
   //ORDENAMIENTO X NOMBRE ASC Y DESC
   function handleSort(e) {
     e.preventDefault();
-    dispatch(orderByName(e.target.value));
+    dispatch(orderCharactersByName(e.target.value));
     setCurrentPage(1);
     setOrden(`Ordenado ${e.target.value}`);
   }
@@ -99,16 +99,16 @@ export default function Home() {
         />
         <SearchBar />
         {currentCharacters &&
-          currentCharacters.map((c) => {
+          currentCharacters.map((char) => {
             //allCharacters.map?
             return (
               <div>
-                <Link to={"/details/" + c.id}>
-                  <Card
-                    name={c.name}
-                    img={c.img}
-                    nickname={c.nickname}
-                    key={c.id}
+                <Link to={"/details/" + char.id}>
+                  <CardCharacter
+                    name={char.name}
+                    img={char.img}
+                    nickname={char.nickname}
+                    key={char.id}
                   />
                 </Link>
               </div>

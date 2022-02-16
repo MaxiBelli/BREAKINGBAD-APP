@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.containerGlobalCard {
+    background-color: #10772a;
+    border: #00401e solid;
+    height: 20em;
+    width: 20em;
+    margin: 1rem;
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr; */
+    box-shadow: 3px 6px 3px rgba(0, 0, .5, .5);
+    text-decoration: none;
+}
+
+.containerTextCard {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+
+.containerNicknameCard {
+    background-color: #00401e;
+    border: #00401e solid;
+    margin-top: 30px;
+    box-shadow: 3px 6px 3px rgba(0, 0, .5, .5);
+}
+
+.containerStatusCard {
+    background-color: #00401e;
+    border: #00401e solid;
+    margin-top: 50px;
+    box-shadow: 3px 6px 3px rgba(0, 0, .5, .5);
+}
+
+.containerImgCard {
+    background-color: #10772a;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr
+}
+
+.imgCard {
+    margin: auto;
+    width: 85%;
+    border: #00401e solid;
+    box-shadow: 3px 6px 3px rgba(0, 0, .5, .5);
+}
+
+.h3Card {
+    color: white;
+}

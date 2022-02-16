@@ -1,4 +1,5 @@
 import React from "react";
+import styles from './styles/Paged.module.css'
 
 export default function Paged({ charactersPerPage, allCharacters, page }) {
   //me las traigo como props del otro comp
@@ -13,8 +14,8 @@ export default function Paged({ charactersPerPage, allCharacters, page }) {
       <ul>
         {pageNumbers &&
           pageNumbers.map((number) => (
-            <li key={number}>
-              <a onClick={() => page(number)}>{number}</a>
+            <li className={styles.liPaged} key={number}>
+              <button onClick={() => page(number)} className={styles.btnPaged} >{number}</button>
             </li>
           ))}
       </ul>
