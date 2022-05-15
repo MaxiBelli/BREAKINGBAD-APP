@@ -1,17 +1,23 @@
-const { Character, Occupation } = require("../db");
+const { Character, Occupation, Quote } = require("../db");
 
-const getDbInfo = async () => {
+const getCharactersDb = async () => {
   return await Character.findAll({
-    include: {
-      model: Occupation,
-      attributes: ["name"],
-      through: {
-        attributes: [],
+    include: [
+      {
+        model: Occupation,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
       },
-    },
+      {
+        model: Quote,
+        attributes: ["quote"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
   });
 };
-module.exports = getDbInfo;
-
-
-
+module.exports = getCharactersDb;

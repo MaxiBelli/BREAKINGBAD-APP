@@ -4,6 +4,8 @@ const { Router } = require("express");
 
 const charactersRouter = require("./characters");
 const occupationsRouter = require("./occupations");
+const quotesRouter = require("./quotes");
+const deathsRouter = require("./deaths");
 
 const router = Router();
 
@@ -12,5 +14,7 @@ const router = Router();
 
 router.use("/characters", charactersRouter);
 router.use("/occupations", occupationsRouter);
+router.use("/quotes", quotesRouter);
+router.use("/deaths", deathsRouter);
 
 module.exports = router;
