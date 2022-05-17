@@ -4,13 +4,23 @@ const getDeathsApi = require("./getDeathsApi");
 const getCharactersWithDeaths = async () => {
   let apiCharacters = await getCharactersWithQuotes();
   const apiDeaths = await getDeathsApi();
-  const array = apiCharacters.concat(apiDeaths);
+  const apiCharactersAndQuotes = apiCharacters.concat(apiDeaths);
 
-  const otro = {};
+  const aux = {};
 
-  array.forEach(
-    ({ name, id, nickname, img, status, occupations, birthday, quotes, ...rest }) => {
-      otro[name] = otro[name] || {
+  apiCharactersAndQuotes.forEach(
+    ({
+      name,
+      id,
+      nickname,
+      img,
+      status,
+      occupations,
+      birthday,
+      quotes,
+      ...rest
+    }) => {
+      aux[name] = aux[name] || {
         name,
         id,
         nickname,
@@ -23,13 +33,14 @@ const getCharactersWithDeaths = async () => {
         responsible: [],
         last_words: [],
       };
-      otro[name].cause.push(rest.cause);
-      otro[name].responsible.push(rest.responsible);
-      otro[name].last_words.push(rest.last_words);
+      aux[name].cause.push(rest.cause);
+      aux[name].responsible.push(rest.responsible);
+      aux[name].last_words.push(rest.last_words);
     }
   );
 
-  const finalData = Object.values(otro);
+  const data = Object.values(aux);
+  let finalData = data.filter((e) => e.status);
 
   return finalData;
 };

@@ -6,11 +6,6 @@ module.exports = (sequelize) => {
   sequelize.define("quote", {
     quote: {
       type: DataTypes.STRING,
-      
-    },
-    author: {
-      type: DataTypes.STRING,
-      
     },
   });
 };

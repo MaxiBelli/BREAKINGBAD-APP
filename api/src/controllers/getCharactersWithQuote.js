@@ -4,13 +4,13 @@ const getQuotesApi = require(".//getQuotesApí");
 const getCharactersWithQuotes = async () => {
   let apiCharacters = await getCharactersApi();
   const apiQuotes = await getQuotesApi();
-  const array = apiCharacters.concat(apiQuotes);
+  const apiCharactersAndQuotes = apiCharacters.concat(apiQuotes);
 
-  const otro = {};
+  const aux = {};
 
-  array.forEach(
+  apiCharactersAndQuotes.forEach(
     ({ name, id, nickname, img, status, occupations, birthday, ...rest }) => {
-      otro[name] = otro[name] || {
+      aux[name] = aux[name] || {
         name,
         id,
         nickname,
@@ -20,11 +20,11 @@ const getCharactersWithQuotes = async () => {
         birthday,
         quotes: [],
       };
-      otro[name].quotes.push(rest.quotes);
+      aux[name].quotes.push(rest.quotes);
     }
   );
 
-  const finalData = Object.values(otro);
+  const finalData = Object.values(aux);
 
   return finalData;
 };
