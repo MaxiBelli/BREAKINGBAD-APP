@@ -1,14 +1,12 @@
 const { Router } = require("express");
-
 const { Character, Occupation } = require("../db");
-const getAllCharacters = require("../Controllers/getAllCharacters");
-
+const getFullCharactersApi = require("../Controllers/getFullCharactersApi");
 const router = Router();
 
 router.get("/", async (req, res) => {
   let occupationsDb = await Occupation.findAll();
   if (occupationsDb.length === 0) {
-    const charactersTotal = await getAllCharacters();
+    const charactersTotal = await getFullCharactersApi();
     const aux = await charactersTotal.map((el) => el.occupations);
     let occupationsApi = [];
     for (let i = 0; i < aux.length; i++) {

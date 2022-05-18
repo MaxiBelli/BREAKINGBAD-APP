@@ -1,12 +1,10 @@
-const getCharactersWithQuotes = require('./getCharactersWithQuote')
-const getCharactersDb = require('./getCharactersDb')
-const getCharactersWithDeaths = require('./getCharactersWithDeaths')
+const getFullCharactersApi = require("./getFullCharactersApi");
+const getCharactersDb = require("./getCharactersDb");
 
 const getAllCharacters = async () => {
-    let apiInfo = await getCharactersWithDeaths();
-    // const dbInfo = await getCharactersDb();
-    // const totalInfo = apiInfo.concat(dbInfo);
-    // return totalInfo;
-    return apiInfo;
-  };
+  const apiInfo = await getFullCharactersApi();
+  const dbInfo = await getCharactersDb();
+  const totalInfo = apiInfo.concat(dbInfo);
+  return totalInfo;
+};
 module.exports = getAllCharacters;

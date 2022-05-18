@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const { Character, Occupation, Quote } = require("../db");
 const getAllCharacters = require("../Controllers/getAllCharacters");
-// const getCharactersQuotes = require("../controllers/getCharactersWithQuote");
 
 const router = Router();
 
@@ -66,38 +65,34 @@ router.post("/", async (req, res) => {
   res.send("Character created successfuly!!");
 });
 
-// router.get("/:id", async (req, res) => {
-//   const id = req.params.id;
-//   if (!isNaN(id)) {
-//     const characterIdUrl = await axios.get(
-//       "https://www.breakingbadapi.com/api/characters/" + id
-//     );
-//     const characterIdInfo = await characterIdUrl.data.map((el) => {
-//       const { char_id, name, nickname, birthday, status, img, occupation } = el;
-//       return {
-//         char_id,
-//         name,
-//         nickname,
-//         birthday,
-//         status,
-//         img,
-//         occupation,
-//       };
-//     });
-//     res.send(characterIdInfo);
-//   } else {
-//     const characterIdBd = await Character.findByPk(id, {
-//       include: {
-//         model: Occupation,
-//         attributes: ["name"],
-//         through: {
-//           attributes: [],
-//         },
-//       },
-//     });
-//     res.send(characterIdBd);
-//   }
-// });
+//PUT
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const character = req.body;
+
+  try {
+    let updateCharacter = await Activity.update(character, {
+      where: { id },
+    });
+    return res.json({ changed: true });
+  } catch (error) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
+//DELETE
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let deleteCharacter = await Character.destroy({
+      where: { id },
+    });
+    return res.json({ erased: true });
+  } catch (error) {
+    res.status(400).send("Something went wrong");
+  }
+});
 
 module.exports = router;
 

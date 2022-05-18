@@ -25,5 +25,4 @@ const getQuotesApi = async () => {
   return quotes;
 };
 
-
 module.exports = getQuotesApi;
