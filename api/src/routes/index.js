@@ -6,6 +6,7 @@ const charactersRouter = require("./characters");
 const occupationsRouter = require("./occupations");
 const quotesRouter = require("./quotes");
 const deathsRouter = require("./deaths");
+const deathsCausedRouter = require("./deathsCaused");
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/characters", charactersRouter);
 router.use("/occupations", occupationsRouter);
 router.use("/quotes", quotesRouter);
 router.use("/deaths", deathsRouter);
+router.use("/deathsCaused", deathsCausedRouter);
 
 module.exports = router;
